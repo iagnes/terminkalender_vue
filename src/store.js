@@ -5,7 +5,9 @@ const state = reactive({
     calendarWeekData,
 });
  
-const getters = {};
+const getters = {
+    activeDay: () => state.calendarWeekData.find((day) => day.active),
+};
  
 const mutations = {};
  
