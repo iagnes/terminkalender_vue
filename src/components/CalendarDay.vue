@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header text-center" role="button">
-      <strong>Montag</strong>
+      <strong>{{day.fullName}}</strong>
     </div>
     <div class="card-body">
       <CalendarEvent />
@@ -16,6 +16,7 @@ export default {
   components: {
     CalendarEvent,
   },
+  props: ["day"],
 };
 </script>
 
