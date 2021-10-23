@@ -16,7 +16,26 @@ export default {
   components: {
     CalendarEvent,
   },
-  props: ["day"],
+  props: {
+    day: {
+      type: Object,
+      required: true,
+      // Bei primitiven Datentypen: default: 100
+      // Bei nicht-primitiven Datentypen: 
+      default: function() {
+        return {
+          id: -1,
+          fullName: "Fehlender Wochentag",
+          events: [],
+        };
+      },
+      validator: function(value) {
+        if (Object.keys(value).includes("id")) {
+          return true;
+        }
+      },
+    },
+  },
 };
 </script>
 
