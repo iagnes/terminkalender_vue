@@ -3,9 +3,11 @@
     <div class="row">
       <div class="col-12">
         <!-- Anfang: Template für die Calendar-Week-Component -->
-        <!-- <CalendarWeekAsList />
+        <!--         <CalendarWeekAsList />
         <CalendarWeek /> -->
-        <keep-alive><component :is="activeView" /></keep-alive>
+        <keep-alive>
+          <component :is="activeView" />
+        </keep-alive>
         <!-- Ende: Template für die Calendar-Week-Component -->
       </div>
     </div>
@@ -35,44 +37,45 @@
 </template>
 
 <script>
-// import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent } from "vue";
 import Store from "./store";
 import CalendarWeek from "./components/CalendarWeek";
 import CalendarWeekAsList from "./components/CalendarWeekAsList";
 import CalendarEntry from "./components/CalendarEntry";
-import CalendarSettings from "./components/CalendarSettings";
+// import CalendarSettings from "./components/CalendarSettings";
 
 export default {
   name: "App",
   components: {
+    // Langschreibweise
+    // 'CalendarWeek': CalendarWeek,
+
+    // Kurzschreibweise
     CalendarWeek,
     CalendarWeekAsList,
     CalendarEntry,
-    CalendarSettings,
-    /*: defineAsyncComponent(() => {
+    CalendarSettings: defineAsyncComponent(() =>
       import(
-        webpackChunkName: 'CalendarSettings'  "./components/CalendarSettings.vue"
-      );
-    }),
-    */
+        /*webpackChunkName: 'CalendarSettingsComponent' */ "./components/CalendarSettings.vue"
+      )
+    ),
   },
   data() {
     return {
       displaySettings: false,
     };
   },
-  methods: {
-    toggleDisplaySettings() {
-      this.displaySettings = !this.displaySettings;
-    },
-  },
   computed: {
     buttonSettingsClasses() {
       return this.displaySettings ? ["btn-success"] : ["btn-outline-success"];
     },
-
     activeView() {
       return Store.getters.activeView();
+    },
+  },
+  methods: {
+    toggleDisplaySettings() {
+      this.displaySettings = !this.displaySettings;
     },
   },
 };
