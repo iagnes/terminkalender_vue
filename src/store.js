@@ -8,10 +8,12 @@ import {
 
 const state = reactive({
     calendarWeekData,
+    activeView: "CalendarWeek",
 });
 
 const getters = {
     activeDay: () => state.calendarWeekData.find((day) => day.active),
+    activeView: () => state.activeView,
 };
 
 const mutations = {
@@ -52,6 +54,9 @@ const mutations = {
             color: eventDO.color,
             priority: Number(eventDO.priority),
         });
+    },
+    setActiveView(view) {
+        state.activeView = view;
     },
 };
 export default {
