@@ -7,8 +7,19 @@
         </h5>
       </div>
       <div class="card-body">
-        <input type="text" class="form-control" placeholder="Neuer Eintrag" />
-        <select class="form-select mt-2">
+        <div class="alert alert-danger" v-if="error">
+          Der Titel darf nicht leer sein.
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Neuer Eintrag"
+          ref="eventTitleInput"
+          v-model="event.title"
+          @keyup.enter.exact="submitEvent()"
+          @keyup.ctrl.enter.exact="resetEventTitle()"
+        />
+        <select class="form-select mt-2" v-model="event.priority">
           <option value="-1">Hoch</option>
           <option value="0">Mittel</option>
           <option value="1">Tief</option>
@@ -26,8 +37,16 @@
         </div>
         <hr />
         <div class="d-grid gap-2">
-          <button class="btn btn-primary">Eintragen</button>
-          <button class="btn btn-danger">Inhalt löschen</button>
+          <button
+            class="btn btn-primary"
+            :disabled="submitEventButtonStatus"
+            @click="submitEvent()"
+          >
+            Eintragen
+          </button>
+          <button class="btn btn-danger" @click="resetEventTitle()">
+            Inhalt löschen
+          </button>
         </div>
       </div>
     </div>
@@ -46,13 +65,22 @@ export default {
         color: "primary",
         priority: 0,
       },
+      error: false,
     };
   },
   computed: {
     activeDayName() {
       return Store.getters.activeDay().fullName;
     },
+    submitEventButtonStatus() {
+      return this.event.title === "";
+    },
   },
+
+  mounted() {
+    this.$refs.eventTitleInput.focus();
+  },
+
   methods: {
     eventColorClasses(eventColor) {
       return [
@@ -66,9 +94,24 @@ export default {
     setEventColor(eventColor) {
       this.event.color = eventColor;
     },
+    submitEvent() {
+      if (this.event.title === "") return (this.error = true);
+
+      Store.mutations.storeEvent(this.event),
+        (this.event = {
+          title: "",
+          color: "primary",
+          priority: 0,
+        });
+      this.error = false;
+    },
+
+    resetEventTitle() {
+      this.event.title = "";
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 </style>
